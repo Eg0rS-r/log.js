@@ -21,17 +21,6 @@ const mount = (vnode, container, data) => {
 				return
 			}
 		}
-		if (vnode.props[i].name === 'l-for') {
-			let forValues = vnode.props[i].value.split(/ in /g);
-			localVnode.props.removeNamedItem(vnode.props[i].name);
-			let forArr = localData[forValues[1]];
-			
-			for (let i = 0; i < forArr.length; i++) {
-				localData[forValues[0]] = localData[forValues[1]][i]
-				mount(localVnode, container, localData)
-			}
-			continue
-		}
 		el.setAttribute(vnode.props[i].name, vnode.props[i].value)
 	}
 
@@ -39,15 +28,8 @@ const mount = (vnode, container, data) => {
 		let dataVar = vnode.children.match(/{{ [A-z]+ }}/g);
 		if (dataVar) {
 			dataVar.forEach(item => {
-				console.log(item)
-				console.log(localData[item.match(/[A-z]+/)[0]])
 				el.textContent = vnode.children.replace(item, localData[item.match(/[A-z]+/)[0]])
 			})
-		// } else if (/{{ [A-z]+\.[A-z]+/g.exec(vnode.children)) {
-		// 	/[A-z]+/g.exec(vnode.children).forEach(item => {
-		// 		// {{ [A-z]+\..* }}U
-		// 		el.textContent = vnode.children.replace(item, localData[item.match(/[A-z]+/)[0]])
-		// 	})
 		} else {
 			el.textContent = vnode.children
 		}
@@ -73,13 +55,6 @@ const mount = (vnode, container, data) => {
 
 const unmount = (vnode) => {
 	vnode.$el.parentNode.removeChild(vnode.$el)
-}
-
-const insertMount = (vnode, parent) => {
-
-
-
-	insertBefore(vnode.$el, parent.$el.children[vnode.order + 1])
 }
 
 const patchMount = (parentVNode, vnode, changeState) => {
