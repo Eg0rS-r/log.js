@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div id="app">
+		<div id="container">
+			<button onclick="state.randomNumber++">Click</button>
+			<h2 l-if="countDisp" l-for="item in items">{{ randomNumber }} num {{ item }}</h2>
+			<button onclick="state.countDisp = !state.countDisp">display</button>
+			<div>
+				<ul>
+					<li>alskdf</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script src="./log.script.js"></script>
+	<script src="./log.reactivity.js"></script>
+	<script src="./log.vdom.js"></script>
+	<script>
+		const state = reactive({
+			randomNumber: -1,
+			countDisp: true,
+			items: [
+				0,
+				1,
+				2,
+				3,
+				4,
+			],
+		})
+
+		vnode = createNode(document.getElementById('container'), 0)
+		document.getElementById('app').innerHTML = ''
+		mount(vnode, document.getElementById('app'), state)
+
+		console.log(vnode)
+
+		let currentState;
+		watchEffect(() => {
+			patchMount(document.getElementById('app'), vnode, compareState(currentState, state));
+			console.log(vnode.$el)
+			currentState = copyObj(state);
+		})
+
+	</script>
+</body>
+
+</html>
